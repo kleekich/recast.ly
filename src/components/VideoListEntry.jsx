@@ -11,7 +11,7 @@ class VideoListEntry extends React.component (
   
   render(){
     return (
-      <div className="videoItem" onClick={this.onVideoClick.bind(this)}>
+      <div className="videoItem" onClick={this.onVideoClick.bind()}>
         <div className="video-list-entry media">
           <div className="media-left media-middle">
             <img className="media-object" src={this.props.videoObject.snippet.thumbnails.default.url} alt="" />

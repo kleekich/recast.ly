@@ -1,23 +1,32 @@
 import VideoList from './VideoList.js';
 import VideoPlayer from './VideoPlayer.js';
 
-var App = () => (
-  <div>
-    <nav className="navbar">
-      <div className="col-md-6 offset-md-3">
-        <div><h5><em>search</em> view goes here</h5></div>
-      </div>
-    </nav>
-    <div className="row">
-      <div className="col-md-7">
-        <VideoPlayer />
-      </div>
-      <div className="col-md-5">
-        <VideoList /> 
+class App extends React.Component (
+  
+  constructor(props){
+    super(props);
+    this.state = {
+      this.videoPlaying
+    }
+  }
+  
+  return (
+    <div>
+      <nav className="navbar">
+        <div className="col-md-6 offset-md-3">
+          <div><h5><em>search</em> view goes here</h5></div>
+        </div>
+      </nav>
+      <div className="row">
+        <div className="col-md-7">
+          <VideoPlayer />
+        </div>
+        <div className="col-md-5">
+          <VideoList /> 
+        </div>
       </div>
     </div>
-  </div>
-  
+  );
 );
 
 
