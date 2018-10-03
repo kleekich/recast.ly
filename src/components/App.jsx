@@ -1,52 +1,52 @@
 import VideoList from './VideoList.js';
 import VideoPlayer from './VideoPlayer.js';
+import exampleVideoData from '../data/exampleVideoData.js';
+import Search from './Search.js';
+import searchYouTube from '../lib/searchYouTube.js';
+import YOUTUBE_API_KEY from '../config/youtube.js'
 
 class App extends React.Component {
-  
+    
   constructor(props) {
+    
     super(props);
     this.state = {
-      searchYouTube: props.searchYouTube,
-      selectedVideo: {
-            kind: 'youtube#searchResult',
-            etag: 'abQHWywil_AkNqdqji7_FqiK-u4/Ykxo_CqKu8F8kcm-iNgL332gQTY',
-            id: {
-              kind: 'youtube#video',
-              videoId: '4ZAEBxGipoA'
-            },
-            snippet: {
-              publishedAt: '2015-08-02T20:52:58.000Z',
-              channelId: 'UCJbPGzawDH1njbqV-D5HqKw',
-              title: 'React JS Tutorial for Beginners - 1 - Introduction',
-              description: 'My website - https://www.thenewboston.com/videos.php Have questions about the tutorial or React? Ask them here ...',
-              thumbnails: {
-                default: {
-                  url: 'https://i.ytimg.com/vi/4ZAEBxGipoA/default.jpg',
-                  width: 120,
-                  height: 90
-                },
-                medium: {
-                  url: 'https://i.ytimg.com/vi/4ZAEBxGipoA/mqdefault.jpg',
-                  width: 320,
-                  height: 180
-                },
-                high: {
-                  url: 'https://i.ytimg.com/vi/4ZAEBxGipoA/hqdefault.jpg',
-                  width: 480,
-                  height: 360
-                }
-              },
-              channelTitle: 'thenewboston',
-              liveBroadcastContent: 'none'
-            }
-      }
+      selectedVideo: exampleVideoData[0],
+      searchedVideos: exampleVideoData
     };
     this.videoClick = this.videoClick.bind(this);
+    
+    // this.props.searchYouTube({'q':'react','max':5,'key':YOUTUBE_API_KEY}, this.handleSearch.bind(this));
+    
   };
+  
+  componentDidMount() {
+    this.getYouTubeVideos('dogs');    
+    
+  }
+  
+  getYouTubeVideos(query) {
+    var options = {
+      key:YOUTUBE_API_KEY,
+      query:query
+    };
+    this.props.searchYouTube(options, (videos) => 
+      this.setState({
+        selectedVideo:videos[0],
+        searchedVideos:videos
+      })
+    )
+  }
+  
   
   videoClick(video) {
     this.setState({selectedVideo: video});
-  };  
+  };
+  
+  handleSearch(response) {
+    var videos = response;
+    this.setState({searchedVideos: videos});
+  }  
 
   //console.log(this.state.selectedVideo);
   
@@ -55,7 +55,9 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><h5><em>search</em> view goes here</h5></div>
+            <div className="search">
+              <Search handleSearchInputChange={this.getYouTubeVideos.bind(this)}/>
+              </div>
           </div>
         </nav>
         <div className="row">
@@ -63,7 +65,7 @@ class App extends React.Component {
             <VideoPlayer className='video-player' video={this.state.selectedVideo} />
           </div>
           <div className="col-md-5">
-            <VideoList videoClick={this.videoClick}/> 
+              <VideoList videos={this.state.searchedVideos} videoClick={this.videoClick}/> 
           </div>
         </div>
       </div>
